@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+      env:
+        GHCR_REGISTRY: ghcr.io
+        IMAGE: desire456/demo
 
       steps:
         - uses: actions/checkout@v2
@@ -15,6 +18,6 @@ jobs:
           with:
             username: ${{ github.actor }}
             password: ${{ secrets.GHCR_TOKEN }}
-            registry: ghcr.io
-            repository: desire456/demo
+            registry: ${{ env.GHCR_REGISTRY }}
+            repository: ${{ env.IMAGE }}
             tag_with_ref: true
