@@ -11,13 +11,13 @@ jobs:
         GHCR_REGISTRY: ghcr.io
         IMAGE: desire456/demo
 
-      steps:
-        - uses: actions/checkout@v2
-        - name: Push to GitHub Packages
-          uses: docker/build-push-action@v1
-          with:
-            username: ${{ github.actor }}
-            password: ${{ secrets.GHCR_TOKEN }}
-            registry: ${{ env.GHCR_REGISTRY }}
-            repository: ${{ env.IMAGE }}
-            tag_with_ref: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+          registry: ${{ env.GHCR_REGISTRY }}
+          repository: ${{ env.IMAGE }}
+          tag_with_ref: true
