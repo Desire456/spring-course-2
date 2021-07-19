@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+  app:
+    image: app
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      - CATALINA_OPTS=-DJDBC_DATABASE_URL="jdbc:postgresql://db:5432/postgres?user=root&password=root"
+    depends_on:
+      - db
