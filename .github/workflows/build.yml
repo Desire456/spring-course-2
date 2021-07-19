@@ -7,9 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-      env:
-        GHCR_REGISTRY: ghcr.io
-        IMAGE: desire456/demo
+    env:
+      GHCR_REGISTRY: ghcr.io
+      IMAGE: desire456/demo
 
     steps:
       - uses: actions/checkout@v2
