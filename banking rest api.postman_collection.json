@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "cfc112f9-cae2-4835-a983-b571252d366d",
+		"name": "banking rest api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "userName",
+							"value": "user",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "text"
+						},
+						{
+							"key": "orderNumber",
+							"value": "order2",
+							"type": "text"
+						},
+						{
+							"key": "amount",
+							"value": "150",
+							"type": "text"
+						},
+						{
+							"key": "currency",
+							"value": "700",
+							"type": "text"
+						},
+						{
+							"key": "returnUrl",
+							"value": "https://github.com",
+							"type": "text"
+						},
+						{
+							"key": "failUrl",
+							"value": "failUrl",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/register.do",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"register.do"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reverse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/rest/reverse.do",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"reverse.do"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get order status",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "userName",
+							"value": "user",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "text"
+						},
+						{
+							"key": "orderId",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/getOrderStatus.do",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"getOrderStatus.do"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

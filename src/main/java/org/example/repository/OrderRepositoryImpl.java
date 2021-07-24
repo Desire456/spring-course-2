@@ -32,7 +32,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     public Optional<Order> save(Order order) {
         if (order.getId() == 0) {
             return DataUtils.queryForOptional("INSERT INTO orders(user_id, order_number, amount, currency, " +
-                            "return_url, fail_url, order_status) VALUES (?,?,?,?,?,?,?) RETURNING id, userId, " +
+                            "return_url, fail_url, order_status) VALUES (?,?,?,?,?,?,?) RETURNING id, user_id, " +
                             "order_number, amount, currency, return_url, fail_url, order_status",
                     jdbcTemplate,
                     rowMapper,
