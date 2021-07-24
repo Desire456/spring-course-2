@@ -1,7 +1,6 @@
 package org.example.repository;
 
 import org.example.entity.User;
-import org.example.exception.DatabaseException;
 import org.example.utils.DataUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,11 +23,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean containsUser(String userName) {
-        return Optional.ofNullable(
-                jdbcTemplate.queryForObject("SELECT count(id) FROM users WHERE username = ?", Integer.class,
-                        userName))
-                .orElseThrow(DatabaseException::new) != 0;
+    public Boolean containsUser(String userName) {
+        return jdbcTemplate.queryForObject("SELECT count(*) <> 0 FROM users WHERE username = ?", Boolean.class,
+                userName);
     }
 
     @Override

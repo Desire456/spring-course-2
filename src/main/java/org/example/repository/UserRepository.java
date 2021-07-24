@@ -5,6 +5,6 @@ import org.example.entity.User;
 import java.util.Optional;
 
 public interface UserRepository {
-    boolean containsUser(String userName);
+    Boolean containsUser(String userName);
     Optional<User> findByUserName(String username);
 }
