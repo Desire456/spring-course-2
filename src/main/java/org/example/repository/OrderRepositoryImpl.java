@@ -1,6 +1,7 @@
 package org.example.repository;
 
 import org.example.entity.Order;
+import org.example.entity.User;
 import org.example.utils.DataUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -49,11 +50,20 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Optional<Order> findByOrderId(long orderId) {
+    public Optional<Order> findById(long orderId) {
         return DataUtils.queryForOptional("SELECT id, user_id, order_number, amount, currency, return_url," +
                         " fail_url, order_status FROM orders where id = ?",
                 jdbcTemplate,
                 rowMapper,
                 orderId);
+    }
+
+    @Override
+    public Optional<Order> findByIdAndUser(long id, User user) {
+        return DataUtils.queryForOptional("SELECT id, user_id, order_number, amount, currency, return_url," +
+                        " fail_url, order_status FROM orders where id = ? and user_id = ?",
+                jdbcTemplate,
+                rowMapper,
+                id, user.getId());
     }
 }

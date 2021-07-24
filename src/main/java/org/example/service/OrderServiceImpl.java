@@ -28,9 +28,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderStatusResponseDto cancel(OrderStatusRequestDto orderStatusRequestDto) {
-        userService.validateUser(orderStatusRequestDto.getUserName(), orderStatusRequestDto.getPassword());
+        User user = userService.validateUser(orderStatusRequestDto.getUserName(), orderStatusRequestDto.getPassword());
 
-        Order order = findById(orderStatusRequestDto.getOrderId());
+        Order order = orderRepository.findByIdAndUser(orderStatusRequestDto.getOrderId(), user)
+                .orElseThrow(ItemNotFoundException::new);
 
         order.setOrderStatus(OrderStatuses.CANCELLED);
         Order updated = orderRepository.save(order)
@@ -41,14 +42,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderStatusResponseDto getOrderStatus(OrderStatusRequestDto orderStatusRequestDto) {
-        return OrderMapper.toOrderStatusResponseDto(
-                findById(orderStatusRequestDto.getOrderId())
-        );
+        User user = userService.validateUser(orderStatusRequestDto.getUserName(), orderStatusRequestDto.getPassword());
+
+        Order order = orderRepository.findByIdAndUser(orderStatusRequestDto.getOrderId(), user)
+                .orElseThrow(ItemNotFoundException::new);
+        return OrderMapper.toOrderStatusResponseDto(order);
     }
 
     @Override
     public Order findById(long id) {
-        return orderRepository.findByOrderId(id)
+        return orderRepository.findById(id)
                 .orElseThrow(ItemNotFoundException::new);
     }
 }
