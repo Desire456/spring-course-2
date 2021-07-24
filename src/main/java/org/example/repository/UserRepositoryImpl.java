@@ -3,7 +3,6 @@ package org.example.repository;
 import org.example.entity.User;
 import org.example.exception.DatabaseException;
 import org.example.utils.DataUtils;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -25,11 +24,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean containsUser(String userName, String password) {
+    public boolean containsUser(String userName) {
         return Optional.ofNullable(
-                jdbcTemplate.queryForObject("SELECT count(id) FROM users WHERE username = ? AND password = ?", Integer.class,
-                        userName,
-                        password))
+                jdbcTemplate.queryForObject("SELECT count(id) FROM users WHERE username = ?", Integer.class,
+                        userName))
                 .orElseThrow(DatabaseException::new) != 0;
     }
 

@@ -9,28 +9,18 @@ import org.example.entity.Order;
 import org.example.entity.OrderStatuses;
 import org.example.entity.User;
 import org.example.exception.ItemNotFoundException;
-import org.example.exception.UserNotFoundException;
 import org.example.repository.OrderRepository;
-import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Override
     public Order register(OrderRequestDto orderRequestDto) {
-        User user;
-        //store not encoded password bad practice, but it simple case for learning other things
-        if (userRepository.containsUser(orderRequestDto.getUserName(), orderRequestDto.getPassword())) {
-            //we already check existing of record, but of course that case has the meaning
-            user = userRepository.findByUserName(orderRequestDto.getUserName())
-                    .orElseThrow(ItemNotFoundException::new);
-        } else {
-            throw new UserNotFoundException();
-        }
+        User user = userService.validateUser(orderRequestDto.getUserName(), orderRequestDto.getPassword());
 
         return orderRepository.save(OrderMapper.toEntity(orderRequestDto, user.getId()))
                 .orElseThrow(ItemNotFoundException::new);
@@ -38,9 +28,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderStatusResponseDto cancel(OrderStatusRequestDto orderStatusRequestDto) {
-        if (!userRepository.containsUser(orderStatusRequestDto.getUserName(), orderStatusRequestDto.getPassword())) {
-            throw new UserNotFoundException();
-        }
+        userService.validateUser(orderStatusRequestDto.getUserName(), orderStatusRequestDto.getPassword());
 
         Order order = findById(orderStatusRequestDto.getOrderId());
 
