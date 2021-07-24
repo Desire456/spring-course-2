@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.entity.User;
 import org.example.exception.DatabaseException;
+import org.example.utils.DataUtils;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -34,14 +35,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByUserName(String username) {
-        return queryForOptional("SELECT id, username, password FROM users WHERE username = ?",
+        return DataUtils.queryForOptional(
+                "SELECT id, username, password FROM users WHERE username = ?",
+                jdbcTemplate,
                 rowMapper,
                 username);
-    }
-
-    private <T> Optional<T> queryForOptional(String sql, RowMapper<T> rowMapper, Object... args) {
-        return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(
-                sql, rowMapper, args
-        )));
     }
 }

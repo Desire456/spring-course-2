@@ -1,7 +1,7 @@
 package org.example.repository;
 
 import org.example.entity.Order;
-import org.springframework.dao.support.DataAccessUtils;
+import org.example.utils.DataUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -30,17 +30,19 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public Optional<Order> save(Order order) {
         if (order.getId() == 0) {
-            return queryForOptional("INSERT INTO orders(user_id, order_number, amount, currency, " +
+            return DataUtils.queryForOptional("INSERT INTO orders(user_id, order_number, amount, currency, " +
                             "return_url, fail_url, order_status) VALUES (?,?,?,?,?,?,?) RETURNING id, userId, " +
                             "order_number, amount, currency, return_url, fail_url, order_status",
+                    jdbcTemplate,
                     rowMapper,
                     order.getUserId(), order.getOrderNumber(), order.getAmount(), order.getCurrency(),
                     order.getReturnUrl(), order.getFailUrl(), order.getOrderStatus());
         }
 
-        return queryForOptional("UPDATE orders SET user_id = ?, order_number = ?, amount = ?," +
+        return DataUtils.queryForOptional("UPDATE orders SET user_id = ?, order_number = ?, amount = ?," +
                         "currency = ?, return_url = ?, fail_url = ?, order_status = ? WHERE id = ? " +
                         "RETURNING id, user_id, order_number, amount, currency, return_url, fail_url, order_status",
+                jdbcTemplate,
                 rowMapper,
                 order.getUserId(), order.getOrderNumber(), order.getAmount(), order.getCurrency(),
                 order.getReturnUrl(), order.getFailUrl(), order.getOrderStatus(), order.getId());
@@ -48,15 +50,10 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Optional<Order> findByOrderId(long orderId) {
-        return queryForOptional("SELECT id, user_id, order_number, amount, currency, return_url," +
+        return DataUtils.queryForOptional("SELECT id, user_id, order_number, amount, currency, return_url," +
                         " fail_url, order_status FROM orders where id = ?",
+                jdbcTemplate,
                 rowMapper,
                 orderId);
-    }
-
-    private <T> Optional<T> queryForOptional(String sql, RowMapper<T> rowMapper, Object... args) {
-        return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query(
-                sql, rowMapper, args
-        )));
     }
 }
